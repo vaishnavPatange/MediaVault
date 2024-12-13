@@ -13,7 +13,7 @@ router.route("/register").post(
             maxCount: 1
         },{
             name: "coverImage",
-            maxCount: 3
+            maxCount: 1
         }
     ]),
     registerUser
@@ -23,7 +23,7 @@ router.route("/login").post(loginUser);
 
 // secured route
 router.route("/logout").post(verifyJWT,logoutUser);
-router.route("/refreshToken").post(refreshAccessToken);
+router.route("/refreshToken").post(verifyJWT,refreshAccessToken);
 
 router.route("/change-password").post(verifyJWT, changeCurrentPassword);
 
@@ -33,7 +33,8 @@ router.route("/change-details").patch(verifyJWT, changeAccountDetails);
 
 router.route("/update-avatar").patch(verifyJWT, upload.single("avatar"), updateAvatar);
 
-router.route("/update-coverImage").patch(verifyJWT, upload.single("coverImage"), updateCoverImage);
+router.route("/update-coverImage")
+.patch(verifyJWT, upload.single("coverImage"), updateCoverImage);
 
 router.route("/channel/:username").get(verifyJWT, getUserChannelProfile);
 

@@ -93,10 +93,10 @@ const toggleTweetLike = asyncHandler(async (req, res) => {
         .json( new ApiResponse(200, {like: false}, "unliked") );
     }
 }
-)
+);
 
 const getLikedVideos = asyncHandler(async (req, res) => {
-    //TODO: get all liked videos
+    
     userId = req.user?._id;
 
     const likedVideos = await Like.aggregate([

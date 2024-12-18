@@ -19,6 +19,7 @@ app.use(cookieParser()); // to perform CRUD op in cookies on user browser
 import userRouter from "./routes/user.routes.js";
 import likeRouter from "./routes/like.routes.js";
 import playlistRouter from "./routes/playlist.routes.js";
+import healthcheckRouter from "./routes/healthcheck.routes.js";
 
 //user
 app.use("/api/v1/user", userRouter);
@@ -26,6 +27,8 @@ app.use("/api/v1/user", userRouter);
 app.use("/api/v1/like", likeRouter);
 //playlist
 app.use("/api/v1/playlist", playlistRouter);
+//healthcheck
+app.use("/api/v1/healthcheck", healthcheckRouter);
 
 
 export { app };

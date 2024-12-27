@@ -1,6 +1,6 @@
 import mongoose, {isValidObjectId} from "mongoose"
 import {Video} from "../models/video.model.js"
-import {User} from "../models/user.model.js"
+// import {User} from "../models/user.model.js"
 import {ApiResponse} from "../utils/ApiResponse.js"
 import {asyncHandler} from "../utils/asyncHandler.js"
 import { cloudinaryUpload, cloudinaryDelete } from "../utils/cloudinary.js";
@@ -9,8 +9,49 @@ import { ApiErrors } from "../utils/ApiErrors.js"
 
 const getAllVideos = asyncHandler(async (req, res) => {
     const { page = 1, limit = 10, query, sortBy, sortType, userId } = req.query
-    //TODO: get all videos based on query, sort, pagination
-})
+    
+    const pageNo = parseInt(page);
+    const pageLimit = parseInt(limit);
+    const skip = (pageNo -1) * pageLimit;
+
+    const filter = {};
+
+    if(query.trim() !== ""){
+        filter.$or = [
+            {title: {$regex: query, options: "i"}},
+            {description: {$regex: query, options: "i"}}
+        ]
+    };
+
+    if(userId){
+        filter.owner = userId; 
+    }
+
+    const videos = await Video.find(filter)
+    .sort({sortBy: parseInt(sortType)})
+    .limit(pageLimit)
+    .skip(skip);
+
+    const totalVideos = await Video.countDocuments(filter);
+    const totalPages = Math.ceil(totalVideos/pageLimit);
+
+    return res.status(200)
+    .json(
+        new ApiResponse(
+            200,            
+            {    
+                videos,
+                pageNumber: pageNo,
+                totalVideos,
+                totalPages,
+                limit: pageLimit,
+                hasNextPage: pageNo < totalPages,
+                hasPrevPage: 0 < pageNo
+            },
+            "Videos fetched successfully"
+        )
+    )
+});
 
 const publishAVideo = asyncHandler(async (req, res) => {
     const { title, description} = req.body;
@@ -19,7 +60,7 @@ const publishAVideo = asyncHandler(async (req, res) => {
         (field) => field?.trim() === ""
     )) {throw new ApiErrors(400, "Both the fields are required");}
 
-    const videoLocalPath = req.file?.video[0]?.path;
+    const videoLocalPath = req.file?.videoFile[0]?.path;
     const thumbnailLocalPath = req.file?.thumbnail[0]?.path;
 
     if(!(videoLocalPath && thumbnailLocalPath)) throw new ApiErrors(400, "Both video file and thumbnail is required");

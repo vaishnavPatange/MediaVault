@@ -23,6 +23,7 @@ import healthcheckRouter from "./routes/healthcheck.routes.js";
 import videoRouter from "./routes/video.routes.js";
 import commentRouter from "./routes/comment.routes.js";
 import subscriptionRouter from "./routes/subscription.routes.js";
+import tweetRouter from "./routes/tweet.routes.js";
 
 //user
 app.use("/api/v1/user", userRouter);
@@ -38,5 +39,7 @@ app.use("/api/v1/video", videoRouter);
 app.use("/api/v1/comment", commentRouter);
 //subscription
 app.use("/api/v1/subscription", subscriptionRouter);
+//tweet
+app.use("/api/v1/tweet", tweetRouter);
 
 export { app };

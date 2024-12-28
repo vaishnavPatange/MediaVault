@@ -46,7 +46,7 @@ const getUserChannelSubscribers = asyncHandler(async (req, res) => {
 
     const subscribers = await Subscription.aggregate([
         {
-            $match: { channel: channelId }
+            $match: { channel: new mongoose.Types.ObjectId(channelId) }
         },
         {
             $lookup: {

@@ -65,7 +65,7 @@ MediaVault is a secure and scalable web application designed for efficient media
 4. Set up environment variables:
    - Create a `.env` file in the root directory.
    - Add the following variables:
-     ```
+     ```bash
     PORT=your_port
     MONGO_URI=mongodb+srv://your_username:<your_password>@cluster0.0u0phqu.mongodb.net
     CORS_ORIGIN=*

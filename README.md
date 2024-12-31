@@ -66,17 +66,17 @@ MediaVault is a secure and scalable web application designed for efficient media
    - Create a `.env` file in the root directory.
    - Add the following variables:
      ```bash
-    PORT=your_port
-    MONGO_URI=mongodb+srv://your_username:<your_password>@cluster0.0u0phqu.mongodb.net
-    CORS_ORIGIN=*
-    ACCESS_TOKEN_SECRET=your_access_token_secret
-    ACCESS_TOKEN_EXPIRY=1d
-    REFRESH_TOKEN_SECRET=your_refresh_token_secret
-    REFRESH_TOKEN_EXPIRY=10d
-
-    CLOUDINARY_CLOUD_NAME=your_cloud_name
-    CLOUDINARY_API_KEY=your_api_key
-    CLOUDINARY_API_SECRET=your_api_secret
+      PORT=your_port
+      MONGO_URI=mongodb+srv://your_username:<your_password>@cluster0.0u0phqu.mongodb.net
+      CORS_ORIGIN=*
+      ACCESS_TOKEN_SECRET=your_access_token_secret
+      ACCESS_TOKEN_EXPIRY=1d
+      REFRESH_TOKEN_SECRET=your_refresh_token_secret
+      REFRESH_TOKEN_EXPIRY=10d
+  
+      CLOUDINARY_CLOUD_NAME=your_cloud_name
+      CLOUDINARY_API_KEY=your_api_key
+      CLOUDINARY_API_SECRET=your_api_secret
      ```
 
 5. Start the server:

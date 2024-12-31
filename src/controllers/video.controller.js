@@ -60,8 +60,8 @@ const publishAVideo = asyncHandler(async (req, res) => {
         (field) => field?.trim() === ""
     )) {throw new ApiErrors(400, "Both the fields are required");}
 
-    const videoLocalPath = req.file?.videoFile[0]?.path;
-    const thumbnailLocalPath = req.file?.thumbnail[0]?.path;
+    const videoLocalPath = req.files?.videoFile[0]?.path;
+    const thumbnailLocalPath = req.files?.thumbnail[0]?.path;
 
     if(!(videoLocalPath && thumbnailLocalPath)) throw new ApiErrors(400, "Both video file and thumbnail is required");
 
@@ -126,7 +126,7 @@ const getVideoById = asyncHandler(async (req, res) => {
 
     if(!video) throw new ApiErrors(404, "Video not found");
 
-    return res(200)
+    return res.status(200)
     .json( new ApiResponse(
         200,
         video,
@@ -152,7 +152,10 @@ const updateVideo = asyncHandler(async (req, res) => {
     
     if(!uploadedThumbnail) throw new ApiErrors(500, "Something went wrong while uploading thumbnail");
 
-    await cloudinaryDelete(doesVideoExists.thumbnail, resourceType="image");
+    console.log(doesVideoExistsAndisOwner.thumbnail);
+    
+
+    await cloudinaryDelete(doesVideoExistsAndisOwner.thumbnail, "image");
 
     const updatedVideoDetails = await Video.findByIdAndUpdate(videoId, {
         $set: {

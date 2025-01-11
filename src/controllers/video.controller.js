@@ -18,8 +18,8 @@ const getAllVideos = asyncHandler(async (req, res) => {
 
     if(query.trim() !== ""){
         filter.$or = [
-            {title: {$regex: query, options: "i"}},
-            {description: {$regex: query, options: "i"}}
+            {title: {$regex: query, $options: "i"}},
+            {description: {$regex: query, $options: "i"}}
         ]
     };
 

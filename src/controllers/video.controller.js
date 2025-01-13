@@ -14,23 +14,38 @@ const getAllVideos = asyncHandler(async (req, res) => {
     const pageLimit = parseInt(limit);
     const skip = (pageNo -1) * pageLimit;
 
-    const filter = {};
+    const pipeline = [];
 
-    if(query.trim() !== ""){
-        filter.$or = [
-            {title: {$regex: query, $options: "i"}},
-            {description: {$regex: query, $options: "i"}}
+    const matchStage = {};
+    if(query && query.trim() !== ""){
+        matchStage.$or = [
+            { title: { $regex: query, $options: "i"}},
+            { description: { $regex: query, $options: "i"}}
         ]
-    };
-
-    if(userId){
-        filter.owner = userId; 
     }
 
-    const videos = await Video.find(filter)
-    .sort({sortBy: parseInt(sortType)})
-    .limit(pageLimit)
-    .skip(skip);
+    if(userId){
+        matchStage.owner = userId;
+    }
+
+    if(Object.keys(matchStage).length > 0){
+        pipeline.push({$match: matchStage});
+    }
+
+    if(sortBy && sortType){
+        const sortStage = {
+            $sort: {[sortBy]: parseInt(sortType)}
+        }
+        pipeline.push(sortStage);
+    }
+
+    if(skip > 0){
+        pipeline.push({$skip: skip});
+    }
+
+    pipeline.push({$limit: pageLimit});
+
+    const videos = await Video.aggregate(pipeline);
 
     const totalVideos = await Video.countDocuments(filter);
     const totalPages = Math.ceil(totalVideos/pageLimit);
